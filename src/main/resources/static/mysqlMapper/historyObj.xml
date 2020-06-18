@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.mysqlMapper.HistoryDao">
+	<select id="findAllObj" resultType="com.yidong.pojo.ResponseSupport2">
+		SELECT
+			IFNULL (a.call_begin,STR_TO_DATE(a.statis_date,'%Y%m%d%H%i%s')) callTime,a.actv_nm busiNm,a.chnl_type_cd_desc callTypeNm,
+			a.staff_id answerFlag,a.team_desc callChnl,a.call_duration duration
+			FROM
+			 m_outcall_sum a 
+		<where>
+			a.acpt_telnum=#{userMobile}
+			AND a.statis_date BETWEEN #{beginTime} AND #{endTime}
+		</where>
+	</select>
+	
+	<select id="findItem" resultType="com.yidong.pojo.ResponsePOJO">
+		SELECT c.privname privNm FROM m_10086_market c WHERE
+				c.servnumber=#{userMobile} AND c.recdate 
+				BETWEEN 
+				 #{callTime}
+				AND 
+				DATE_ADD(#{callTime},INTERVAL 48 HOUR) 
+				ORDER BY c.recdate DESC LIMIT 1
+	</select>
+	
+	<select id="findCall" resultType="com.yidong.pojo.MoutboundmarketPOJO">
+		SELECT 
+			if(COUNT(b.subsnumber)>0,'0','1') isBound
+			FROM 
+				m_outboundmarket b
+			WHERE 
+				b.subsnumber=#{userMobile}
+	</select>
+	
+</mapper>
+

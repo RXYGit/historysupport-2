@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.mysqlMapper.OutCallDataReturnDao">
+	<insert id="insertOutCallDataRetrun" parameterType="com.yidong.pojo.OutCallReturnPOJO">
+		INSERT INTO m_bomc_outcallback  
+		(task_id,phone_num,crt_time,sys_id,call_result_code,answer_flag,callType_flag,cust_group_no,ngoc_smpl_id,cretime,ext1,ext2,ext3,ext4) 
+		VALUES 
+		(#{taskId},#{phoneNum},#{crtTime},#{sysId},#{callResultCode},#{answerFlag},#{callTypeFlag},#{custGroupNo},#{ngocSmplId},#{cretime},#{ext1},#{ext2},#{ext3},#{ext4})
+	</insert>
+</mapper>
+

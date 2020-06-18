@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.orcaleMapper.QryCrmProcessMapper">
+
+	<!-- 山东CRM工单查询 add by BWX608729 2020.5.12 begin-->
+    <resultMap type="com.yidong.pojo.QryCrmProcessPOJO" id="crmProMap">
+    	<result column="SERIALNO" property="serialno" />
+	    <result column="URGENTID" property="urgentid"/>
+	    <result column="ACCEPTTIME" property="accepttime" />
+	    <result column="PROCESSSTATE" property="processstate"/>
+    	<result column="SUBSNUMBER" property="subsnumber" />
+	    <result column="SUBSNAME" property="subsname"/>
+	    <result column="SRTYPEID" property="srtypeid" />
+	    <result column="FULLNAME" property="fullname"/>
+	    <result column="ACCEPTSTAFFNO" property="acceptstaffno" />
+	    <result column="SUBSLEVEL" property="subslevel"/>
+    	<result column="SUBSCITY" property="subscity" />
+	    <result column="CONTENT" property="content"/>
+	    <result column="ACCEPTMODE" property="acceptmode"/>
+    </resultMap>
+    <!-- 使用restMap 映射数据库字段和类属性 -->
+	<select id="qryCrmProcess" statementType="CALLABLE" parameterType="java.util.HashMap">	
+	  	 	{call P_C_PBH_QRYCRMPROCESS(
+	  			#{callerno,jdbcType=VARCHAR,mode=IN},
+	  			#{staffId,jdbcType=VARCHAR,mode=IN},
+	  			#{beginDate,jdbcType=VARCHAR,mode=IN},
+	  			#{endDate,jdbcType=VARCHAR,mode=IN},
+	  			#{result,jdbcType=CURSOR,mode=OUT,javaType=ResultSet, resultMap=crmProMap}
+	  		)}
+	</select>
+	<!-- 山东CRM工单查询 add by BWX608729 2020.5.12 end-->
+
+</mapper>

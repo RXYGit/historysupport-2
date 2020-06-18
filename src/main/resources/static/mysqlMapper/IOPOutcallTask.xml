@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.mysqlMapper.IOPOutCallTaskDao">
+	<insert id="insertOutCallTask" >
+		INSERT INTO  m_iop_outcalltask 
+		(subsNumber,pushDate,activityId,activityName,acttype,activityPriority,campaignid,campaignName,treatmentid,marketscencename) 
+		VALUES 
+		(#{subsNumber},#{pushDate},#{activityid},#{activityName},#{acttype},#{activityPriority},#{campaignid},#{campaignName},#{treatmentid},#{marketscencename})
+	</insert>
+</mapper>
+

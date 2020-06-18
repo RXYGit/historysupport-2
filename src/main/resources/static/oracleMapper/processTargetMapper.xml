@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.orcaleMapper.QryProcessTargetMapper">
+
+	<!-- 定制争议类工单投诉和咨询占比 add by BWX608729 2020.5.29 begin-->
+    
+	<select id="qryProcessTarget" resultType="Double" >	
+	  	 <![CDATA[
+	  	 	SELECT DECODE((SUM(T11.TS) + SUM(T11.ZX)),
+              0,
+              0,
+              SUM(T11.TS) / (SUM(T11.TS) + SUM(T11.ZX))) BL
+              FROM (SELECT DECODE(SUBSTR(T.SRTYPEID, 1, 6), '000000', 1, 0) TS,
+                           DECODE(SUBSTR(T.SRTYPEID, 1, 6), '000002', 1, 0) ZX
+                      FROM T_PBH_PROBLEMPROCESS T, T_C_PBH_DZZYSRTYPE T1
+                     WHERE T.PROCESSSTATE <> '30010006'
+                       AND T.SRTYPEID = T1.SRTYPEID
+                       AND T.SERIALNO >= TO_CHAR(SYSDATE, 'YYYYMM')
+                       AND T.SERIALNO < TO_CHAR(ADD_MONTHS(SYSDATE,1),'YYYYMM') 
+            UNION ALL
+            SELECT DECODE(SUBSTR(T.SRTYPEID, 1, 6), '000000', 1, 0) TS,
+                   DECODE(SUBSTR(T.SRTYPEID, 1, 6), '000002', 1, 0) ZX
+              FROM T_PBH_PROBLEMPROCESSHIS T, T_C_PBH_DZZYSRTYPE T1
+             WHERE T.PROCESSSTATE <> '30010006'
+               AND T.SRTYPEID = T1.SRTYPEID
+               AND T.SERIALNO >= TO_CHAR(SYSDATE, 'YYYYMM')
+               AND T.SERIALNO < TO_CHAR(ADD_MONTHS(SYSDATE,1),'YYYYMM')) T11
+	  	 ]]>
+	</select>
+	<!--定制争议类工单投诉和咨询占比 add by BWX608729 2020.5.29 end-->
+
+</mapper>

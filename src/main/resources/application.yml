@@ -1,0 +1,97 @@
+server:
+  port: 8092
+  tomcat:
+    uri-encoding: utf-8
+    max-threads: 6400
+    min-spare-threads: 100
+  servlet:
+    context-path: /
+
+#pdbsokf6(oracle)icdwf/sdyd60_wf
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    jdbc-url: jdbc:oracle:thin:@//10.19.190.113:4406/ora92
+    username: icdwf
+    password: sdyd60_wf
+    initialSize: 1
+  profiles:
+    active:
+      - pro
+
+
+custom:
+  datasource:
+    mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://10.19.138.232:3306/market?characterEncoding=utf8&serverTimezone=GMT%2B8&allowMultiQueries=true
+      username: sdzx
+      password: abc123
+#      jdbc-url: jdbc:mysql://localhost:3306/testsql?characterEncoding=utf8&serverTimezone=GMT%2B8&allowMultiQueries=true
+#      username: root
+#      password: root
+  profiles:
+    active:
+      - pro
+
+#kf3_939(oracle)icd3ivr6/Sdyd_kf3
+customs:
+  datasource:
+    oracle:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@//10.19.190.113:4493/kf3db
+      username: icd3ivr6
+      password: Sdyd_kf3
+  profiles:
+    active:
+      - pro
+
+#CRM sdcrmdb
+customss:
+  datasource:
+    mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://10.19.138.232:3306/sdcrmdb?characterEncoding=utf8&serverTimezone=GMT%2B8
+      username: sdcrmdb
+      password: 1qaz1QAZ
+  profiles:
+    active:
+      - pro
+
+#csp 数据源
+customsss:
+  datasource:
+    oracle:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@//10.19.190.113:4402/ora92
+      username: icdcct
+      password: Sdyd60_cct
+  profiles:
+    active:
+      - pro
+
+mybatis:
+  type-aliases-package: com.yidong.pojo.MysqlPOJO
+  configuration:
+    default-statement-timeout: 30
+    map-underscore-to-camel-case: true
+  mapper-locations:
+    - classpath:static/*/*.xml
+
+
+logging:
+  #  level:
+  #    com.yidong.*: debug
+  #    com.yidong.mysqlMapper: debug
+  #    com.yidong.orcaleMapper: debug
+  #    com.yidong.orcaleMapperTwo: debug
+  config: classpath:logback-spring.xml
+    #  file:s
+    #    path: C:\Users\issuser\Desktop
+    #    name: C:\Users\issuser\Desktop\my.log
+    #  pattern:
+    #    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+    #    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} | [%thread] | %-5level | %logger{50} | %msg%n"
+      
+
+        
