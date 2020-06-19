@@ -18,7 +18,7 @@ import com.yidong.pojo.IOPOutCallTaskPOJO;
 import com.yidong.sqlservice.IOPOutCallTaskService;
 
 /**
- *多波次营销外呼样本接收接口
+ *多波次营销外呼样本接收接口(前店后厂)
  */
 @RestController
 public class IOPOutCallTaskCollection {

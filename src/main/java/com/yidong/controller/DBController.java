@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yidong.oracleservice.OracleService;
@@ -52,7 +53,7 @@ public class DBController {
 		return "index2";
 	}
 
-	@RequestMapping("/testorcle3")
+	@RequestMapping(value = "/testorcle3",method = {RequestMethod.POST})
 	public MysqlPOJO testorcle3(@RequestBody Map<String,String> serialnos) {
 		String serialno = serialnos.get("serialno");
 		MysqlPOJO a = oracleService.findtest(serialno);

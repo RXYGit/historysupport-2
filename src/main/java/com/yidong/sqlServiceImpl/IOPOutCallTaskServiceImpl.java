@@ -18,8 +18,7 @@ public class IOPOutCallTaskServiceImpl implements IOPOutCallTaskService {
 
 	@Override
 	public int insertOutCallTask(IOPOutCallTaskPOJO arryIOP) {
-		int i = iopOutCallTaskDao.insertOutCallTask(arryIOP);
-		return i;
+		return iopOutCallTaskDao.insertOutCallTask(arryIOP);
 	}
 	
 }
