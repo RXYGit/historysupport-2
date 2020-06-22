@@ -2,6 +2,7 @@ package com.yidong.sqlServiceImpl;
 
 import java.util.List;
 
+import com.yidong.pojo.PrepaidAndInstantSuperPOJO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,12 @@ public class SingleStopOweServiceImpl implements SingleStopOweService {
 	public int updateStarCredits(List<SingleStopOweWritebackPOJO> param) {
 		return  singleStopOweDao.updateStarCreditWriteback(param);
 
+	}
+
+	//预付费欠费外呼和瞬时超套欠费外呼查询接口
+	@Override
+	public List<PrepaidAndInstantSuperPOJO> selectPrepaidAndInstantSuper(String campaignid, String nsdate, String lastMonth) {
+		return singleStopOweDao.selectPrepaidAndSuperInstant(campaignid,nsdate,lastMonth);
 	}
 
 

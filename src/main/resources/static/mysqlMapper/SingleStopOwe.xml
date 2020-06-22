@@ -58,5 +58,17 @@
 			a.id=#{p.callId} AND a.calledno=#{p.callNo} AND a.type='1'
 		</foreach>
 	</update>
+
+
+	<!--3.1预付费欠费外呼和瞬时超套欠费外呼查询接口 复用一个接口-->
+	<select id="selectPrepaidAndSuperInstant" resultType="com.yidong.pojo.PrepaidAndInstantSuperPOJO">
+		SELECT b.id,b.campaignid,b.treatmentid,b.subsNumber
+		FROM  m_iop_outcalltask b
+		WHERE
+		    b.campaignid=#{campaignid} AND
+			b.pushDate &gt;= STR_TO_DATE(#{lastMonth}, '%Y-%m-%d %H') AND
+		    b.pushDate &lt;= STR_TO_DATE(#{nsdate},'%Y-%m-%d %H') LIMIT 5
+	</select>
+
 </mapper>
 
