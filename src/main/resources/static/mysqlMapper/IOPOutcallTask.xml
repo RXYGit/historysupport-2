@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yidong.mysqlMapper.IOPOutCallTaskDao">
-	<!--IOP多波次营销外呼样本接收接口(前店后厂)-->
+	<!--杨建光提出IOP多波次营销外呼样本接收接口(前店后厂)-->
 	<insert id="insertOutCallTask" >
 		INSERT INTO  m_iop_outcalltask 
 		(subsNumber,pushDate,activityId,activityName,acttype,activityPriority,campaignid,campaignName,treatmentid,marketscencename) 
 		VALUES 
 		(#{subsNumber},#{pushDate},#{activityid},#{activityName},#{acttype},#{activityPriority},#{campaignid},#{campaignName},#{treatmentid},#{marketscencename})
 	</insert>
+
+	<!--王滨提出入库入库预付费欠费外呼，瞬时超套m_iop_outcalltaskinfo-->
+	<insert id="insertOutCallTaskInfo" parameterType="com.yidong.pojo.IOPOutCallTaskPOJO">
+		<foreach collection="arryIOP" item="p" index="index" open = "" close = "" separator = ";">
+			insert into m_iop_outcalltaskinfo
+			(subsNumber,pushDate,activityId,activityName,acttype,activityPriority,campaignid,campaignName,treatmentid,marketscencename)
+			VALUES
+			(#{p.subsNumber},#{p.pushDate},#{p.activityid},#{p.activityName},#{p.acttype},#{p.activityPriority},#{p.campaignid},#{p.campaignName},#{p.treatmentid},#{p.marketscencename})
+		</foreach>
+	</insert>
+
+	<!--王滨提出，当taskid 为1，3，4，5.6.7.8 时，m_iop_outcalltaskinfo-->
+	<update id="updateTaskId">
+		update m_iop_outcalltaskinfo b set
+			b.taskid=#{taskid},b.childtaskid=#{childTask}
+		where
+			b.pushDate=#{pushDate} AND b.campaignid=#{campaignid}
+	</update>
+
+	<!--先查询配置表campaignid -->
+	<select id="selectIds" resultType="com.yidong.pojo.IOPSelecTaskId">
+		SELECT b.id,b.task_id AS taskId,b.child_task AS childTask
+		FROM  m_c_iop_outcalltaskconf b
+		where
+		b.campaign_id=#{campaignid}
+	</select>
+
+
 </mapper>
 

@@ -60,15 +60,54 @@
 	</update>
 
 
-	<!--3.1预付费欠费外呼和瞬时超套欠费外呼查询接口 复用一个接口-->
-	<select id="selectPrepaidAndSuperInstant" resultType="com.yidong.pojo.PrepaidAndInstantSuperPOJO">
-		SELECT b.id,b.campaignid,b.treatmentid,b.subsNumber
-		FROM  m_iop_outcalltask b
-		WHERE
-		    b.campaignid=#{campaignid} AND
-			b.pushDate &gt;= STR_TO_DATE(#{lastMonth}, '%Y-%m-%d %H') AND
-		    b.pushDate &lt;= STR_TO_DATE(#{nsdate},'%Y-%m-%d %H') LIMIT 5
+	<!--3.1预付费欠费外呼和瞬时超套外呼查询接口 复用一个接口-->
+	<select id="selectPrepaidAndSuperInstant" parameterType="java.util.List" resultType="com.yidong.pojo.PrepaidAndInstantSuperPOJO">
+		SELECT b.id,b.campaignid,b.treatmentid,b.subsNumber,b.childtaskid
+		FROM  m_iop_outcalltaskinfo b
+		WHERE  b.taskid =#{taskId}
+		   <!-- <foreach collection="campaignidList" index="index"  item="camidlist" open = "(" separator = "," close = ")">
+				 #{camidlist.campaignid}
+			</foreach>-->
+		AND
+		b.childtaskid=(SELECT b.childtaskid FROM m_iop_outcalltaskinfo b WHERE b.taskid =#{taskId}
+		                                                                   AND b.pushstatus IS NULL
+		                                                                   AND b.pushDate &gt;= STR_TO_DATE(#{lastMonth}, '%Y-%m-%d %H')
+		                                                                   AND b.pushDate &lt;= STR_TO_DATE(#{nsdate},'%Y-%m-%d %H') LIMIT 1)
+		  AND
+		      b.pushstatus IS NULL
+		  AND
+		      b.pushDate &gt;= STR_TO_DATE(#{lastMonth}, '%Y-%m-%d %H')
+		  AND
+		      b.pushDate &lt;= STR_TO_DATE(#{nsdate},'%Y-%m-%d %H')
+		<choose>
+			<when test='taskId=="1"'>LIMIT 10</when>
+			<when test='taskId=="3"'>LIMIT 5</when>
+			<when test='taskId=="4"'>LIMIT 10</when>
+			<when test='taskId=="5"'>LIMIT 10</when>
+			<when test='taskId=="6"'>LIMIT 10</when>
+			<when test='taskId=="7"'>LIMIT 10</when>
+			<when test='taskId=="8"'>LIMIT 10</when>
+		</choose>
 	</select>
+	<!--3.2预付费欠费外呼和瞬时超套外呼更新已查询到的状态-->
+	<update id="updatePrepaipushstatus" parameterType="java.util.List">
+		UPDATE m_iop_outcalltaskinfo c  SET c.pushstatus='1' WHERE c.id IN
+		<foreach collection="idList" item="ids" index="index"  open = "(" separator = "," close = ")">
+			#{ids}
+		</foreach>
+	</update>
+	<!--3.3预付费欠费外呼和瞬时超套外呼后的 号码修改pushstatus的状态-->
+	<update id="updatePrepaidExt1Status" parameterType="com.yidong.pojo.PrepaidAndInstantRequerPOJO">
+		<foreach collection="param" item="p" index="index" open = "" close = "" separator = ";">
+			UPDATE m_iop_outcalltaskinfo d
+			<set>
+				d.pushstatus=#{p.pushstatus}
+			</set>
+			WHERE
+			d.id=#{p.id} AND d.campaignid=#{p.campaignid}
+		</foreach>
+	</update>
+
 
 </mapper>
 

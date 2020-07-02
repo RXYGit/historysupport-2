@@ -152,7 +152,7 @@
 	<springProfile name="pro">
 	 <root>
 		 <level>info</level>
-		<appender-ref ref="CONSOLE" />
+		<!--<appender-ref ref="CONSOLE" />-->
 		 <appender-ref ref="DEBUG_FILE" />
 		 <appender-ref ref="INFO_FILE" /> 
 		 <appender-ref ref="ERROR_FILE" /> 

@@ -1,7 +1,9 @@
 package com.yidong.sqlServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
+import com.yidong.pojo.PrepaidAndInstantRequerPOJO;
 import com.yidong.pojo.PrepaidAndInstantSuperPOJO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,8 +57,18 @@ public class SingleStopOweServiceImpl implements SingleStopOweService {
 
 	//预付费欠费外呼和瞬时超套欠费外呼查询接口
 	@Override
-	public List<PrepaidAndInstantSuperPOJO> selectPrepaidAndInstantSuper(String campaignid, String nsdate, String lastMonth) {
-		return singleStopOweDao.selectPrepaidAndSuperInstant(campaignid,nsdate,lastMonth);
+	public List<PrepaidAndInstantSuperPOJO> selectPrepaidAndInstantSuper(String taskId, String nsdate, String lastMonth) {
+		return singleStopOweDao.selectPrepaidAndSuperInstant(taskId,nsdate,lastMonth);
+	}
+
+	@Override
+	public void updatePrepaipushstatus(List<String> idList) {
+		singleStopOweDao.updatePrepaipushstatus(idList);
+	}
+
+	@Override
+	public int updateprepaidExt1Status(List<PrepaidAndInstantRequerPOJO> param) {
+		return singleStopOweDao.updatePrepaidExt1Status(param);
 	}
 
 

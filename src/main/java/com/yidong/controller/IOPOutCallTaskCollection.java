@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.yidong.pojo.IOPSelecTaskId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,11 +115,50 @@ public class IOPOutCallTaskCollection {
 				}
 			}
 		}
-		//此处可优化，可采用批量更新
-		for (int i = 0; i < arryIOP.size(); i++) {
-			IOPOutCallTaskPOJO iopPo = arryIOP.get(i);
-			iopOutCallTaskService.insertOutCallTask(iopPo);
+		//1.根据campaignid查询配置表m_c_iop_outcalltaskconf 的字段taskid与childid
+		IOPSelecTaskId rs = iopOutCallTaskService.selectIds((arryIOP.get(0).getCampaignid()));
+		if (rs.getTaskId()==null){
+			hashMap.put("rspCode", "-1");
+			hashMap.put("rspMsg", "入库失败");
+			return hashMap;
 		}
+		/*
+		 * 1、 超套      超套IVR自动外呼
+		 * 4、超阀       超阀IVR自动外呼
+		 * 5、掌厅       掌厅IVR自动外呼
+		 * 6、超饱和  	超饱和IVR自动外呼
+		 * 7、5G         5GIVR自动外呼
+		 * 8、不限量  	不限量升档瞬时IVR外呼
+		 *   比较当结果为1瞬时超套， 2为多波次外呼， 3为预付费欠费
+		 */
+
+		if ("2".equals(String.valueOf(rs.getTaskId()))) {
+			//此处可优化，可采用批量更新
+			//此处入库（新）前店后厂,可咨询杨建光，表名：m_iop_outcalltask
+			for (int i = 0; i < arryIOP.size(); i++) {
+				IOPOutCallTaskPOJO iopPo = arryIOP.get(i);
+				iopOutCallTaskService.insertOutCallTask(iopPo);
+			}
+		}else{
+			//taskId不为2时，比如上面描述的  1，3，4，5，6，7，8，入库王滨 瞬时超套表m_iop_outcalltaskinfo
+			iopOutCallTaskService.insertOutcalltaskinfo(arryIOP);
+			//taskId是1时瞬时超套外呼 更新m_iop_outcalltaskinfo 表中的taskId和childtaskid
+			iopOutCallTaskService.updateTaskId(rs.getChildTask(),rs.getTaskId(),pushDate,arryIOP.get(0).getCampaignid());
+		}
+
+
+//		if ("1".equals(String.valueOf(rs.getTaskId()))){
+//			//taskId为1时，入库王滨 瞬时超套表m_iop_outcalltaskinfo
+//			iopOutCallTaskService.insertOutcalltaskinfo(arryIOP);
+//			//taskId是1时瞬时超套外呼 更新m_iop_outcalltaskinfo 表中的taskId和childtaskid
+//			iopOutCallTaskService.updateTaskId(rs.getChildTask(),pushDate,arryIOP.get(0).getCampaignid());
+//		}if ("3".equals(String.valueOf(rs.getTaskId()))){
+//			//taskId为2时，入库王滨 预付费外呼m_iop_outcalltaskinfo
+//			iopOutCallTaskService.insertOutcalltaskinfo(arryIOP);
+//			//taskId是2时瞬时超套外呼 更新m_iop_outcalltaskinfo 表中的taskId和childtaskid
+//			iopOutCallTaskService.updateTaskId2(rs.getChildTask(),pushDate,arryIOP.get(0).getCampaignid());
+//		}
+
 		hashMap.put("rspCode", "0");
 		hashMap.put("rspMsg", "入库成功");
 		return hashMap;

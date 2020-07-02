@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidong.orcaleMapper.QryMarketInfoMapper">
+
+	<!-- 地址库信息查询 add by BWX608729 2020.6.28 begin-->
+    <resultMap type="java.util.Map" id="marketMap">
+    	<result column="locationname" property="address" />
+    	<result column="'无'" property="address" />
+    </resultMap>
+    
+	<select id="qryMarketInfo" statementType="CALLABLE" parameterType="java.util.HashMap">	
+	  	 	{call P_C_PBH_SEARCHLOCATION(
+	  			#{region,jdbcType=VARCHAR,mode=IN},
+	  			#{county,jdbcType=VARCHAR,mode=IN},
+	  			#{address,jdbcType=VARCHAR,mode=IN},
+	  			#{result,jdbcType=CURSOR,mode=OUT,javaType=ResultSet, resultMap=marketMap}
+	  		)}
+	</select>
+	<!-- 地址库信息查询 add by BWX608729 2020.6.28 end-->
+
+</mapper>
